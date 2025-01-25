@@ -1,0 +1,110 @@
+Read the marks obtained by students of second year in an online examination of particular subject.
+Find out maximum and minimum marks obtained in that subject. Use heap data structure. Analyze the
+algorithm.
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+class Heap
+{
+private:
+ vector<int> heap;
+ void heapifyUp(int index)
+ {
+ int parent = (index - 1) / 2;
+ while (index > 0 && heap[index] > heap[parent])
+ {
+ swap(heap[index], heap[parent]);
+ index = parent;
+ parent = (index - 1) / 2;
+ }
+ }
+ void heapifyDown(int index)
+ {
+ int left = 2 * index + 1;
+ int right = 2 * index + 2;
+ int largest = index;
+ if (left < heap.size() && heap[left] > heap[largest])
+ {
+ largest = left;
+ }
+ if (right < heap.size() && heap[right] > heap[largest])
+ {
+ largest = right;
+ }
+ if (largest != index)
+ {
+ swap(heap[index], heap[largest]);
+ heapifyDown(largest);
+ }
+ }
+public:
+ void insert(int value)
+ {
+ heap.push_back(value);
+ heapifyUp(heap.size() - 1);
+ }
+ int removeMax()
+ {
+ if (heap.empty())
+ {
+ throw out_of_range("Heap is empty");
+ }
+ int maxElement = heap[0];
+ heap[0] = heap.back();
+ heap.pop_back();
+ heapifyDown(0);
+ return maxElement;
+ }
+ int removeMin()
+ {
+ if (heap.empty())
+ {
+ throw out_of_range("Heap is empty");
+ }
+ int minElement = heap[0];
+ heap[0] = heap.back();
+ heap.pop_back();
+ heapifyDown(0);
+ return minElement;
+ }
+ int getMax()
+ {
+ if (heap.empty())
+ {
+ throw out_of_range("Heap is empty");
+ }
+ return heap[0];
+ }
+ int getMin()
+ {
+ if (heap.empty())
+ {
+ throw out_of_range("Heap is empty");
+ }
+ return *min_element(heap.begin(), heap.end());
+ }
+};
+
+
+int main()
+{
+ cout<<" # # # # # # # # PRACTICAL NO.:-10(E-22) # # # # # # # # "<<endl;
+ int numStudents;
+ cout << "\nEnter the number of students : ";
+ cin >> numStudents;
+ Heap marksHeap;
+ cout << "Enter the marks obtained by each student:\n";
+ for (int i = 0; i < numStudents; ++i)
+ {
+ int mark;
+ cout << "Enter marks for student " << i + 1 << ": ";
+ cin >> mark;
+ marksHeap.insert(mark);
+ }
+ cout << "Maximum Marks: " << marksHeap.getMax() << endl;
+ cout << "Minimum Marks: " << marksHeap.getMin() << endl;
+ return 0;
+}
